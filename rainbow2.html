@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, user-scalable=0, shrink-to-fit=no">
+    <title>Радуга</title>
+    <script type="text/javascript">
+
+      /**
+       *
+       * Игра "Радуга" Нового кода НЛП
+       * Использован код игры "Алфавит" Лукаша Евгения <lucash@k-trade.ua>
+       * Модифицировано до "Радуги" Игорем Марковым, 2006
+       * Версия 1.0
+       *
+       */
+      var MIN = 100;
+      var MAX = 5000;
+
+      var delay = 1500;
+      var chopProb = 0.2;
+
+      var colors = ['red', 'green', '#0132FF', 'yellow', 'orange', 'purple', '#ADD8E6'];
+      var colorNames = ['КРАСНЫЙ', 'ЗЕЛЁНЫЙ', 'СИНИЙ', 'ЖЁЛТЫЙ', 'ОРАНЖЕВЫЙ', 'ФИОЛЕТОВЫЙ', 'ГОЛУБОЙ'];
+
+      function nextColor() {
+        var wg = document.getElementById('workGround');
+        wg.style.visibility = 'hidden';
+        var sh = document.getElementById('settings').clientHeight;
+        if (sh < 20) sh = 35;
+        var dw = document.documentElement.clientWidth;
+        var dh = document.documentElement.clientHeight - sh;
+        if (dh < 50) dh = document.body.clientHeight;
+        var cnum = Math.floor(Math.random() * colors.length);
+        var bnum = Math.random() > 0.3 ? cnum : Math.floor(Math.random() * colors.length);
+        wg.innerHTML = Math.random() > chopProb ? colorNames[cnum] : 'ХЛОПОК';
+        var bh = wg.clientHeight;
+        var bw = wg.clientWidth;
+        wg.style.left = Math.floor(Math.random() * (dw - bw)) + 'px';
+        wg.style.top = Math.floor(Math.random() * (dh - bh)) + sh + 'px';
+        wg.style.backgroundColor = colors[bnum];
+
+        wg.style.visibility = 'visible';
+
+        setTimeout(nextColor, delay);
+      }
+
+      function changeDelay(delta) {
+        var newDelay = delay + delta;
+
+        if (newDelay < MIN) {
+          newDelay = MIN;
+        }
+
+        if (newDelay > MAX) {
+          newDelay = MAX;
+        }
+
+        delay = newDelay;
+        var inp = document.getElementById('value');
+        inp.innerText = delay;
+      }
+
+      function setChop() {
+        var inp = document.getElementById('formControlRange');
+        var n = Number(inp.value);
+
+        chopProb = n / 100;
+
+        var valueDisplay = document.getElementById('value2');
+        valueDisplay.innerText = n;
+      }
+
+      function press(e) {
+        switch (e.keyCode) {
+          case 37: // arrow left
+          case 34: // page down
+          case 40: // arrow down
+            if (e.shiftKey) {
+              document.getElementById('minus1000').focus();
+              var newDelay = delay - 1000;
+              if (newDelay < MIN) {
+                newDelay = MIN;
+              }
+              delay = newDelay;
+            } else {
+              document.getElementById('minus100').focus();
+              var newDelay = delay - 100;
+              if (newDelay < MIN) {
+                newDelay = MIN;
+              }
+              delay = newDelay;
+            }
+            break;
+          case 39: // arrow right
+          case 38: // arrow up
+          case 33: // page up
+            if (e.shiftKey) {
+              document.getElementById('plus1000').focus();
+              var newDelay = delay + 1000;
+              if (newDelay > MAX) {
+                newDelay = MAX;
+              }
+              delay = newDelay;
+            } else {
+              document.getElementById('plus100').focus();
+              var newDelay = delay + 100;
+              if (newDelay > MAX) {
+                newDelay = MAX;
+              }
+              delay = newDelay;
+            }
+            break;
+        }
+        document.getElementById('value').innerText = delay;
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document.onkeydown = press;
+      });
+      window.onload = nextColor;
+
+    </script>
+    <style type="text/css">
+
+        html, body {
+            font-family: Times, sans-serif;
+            background-color: #FAFAFA;
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #settings {
+            padding: 5px;
+            text-align: center;
+            background-color: #c8dfd4;
+            border: 1px solid #B2AEA0;
+            vertical-align: top;
+        }
+
+        #workGround {
+            position: absolute;
+            font-size: 90pt;
+            font-weight: bold;
+            text-align: center;
+            padding-left: 20pt;
+            padding-right: 20pt;
+            padding-top: 0.2em;
+            padding-bottom: 0.0em;
+        }
+
+        #workGround div {
+
+        }
+
+        .value-label {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        button {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            padding: 0 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-transform: none;
+        }
+
+        button {
+            color: #343a40;
+            background-color: transparent;
+            background-image: none;
+            border-color: #343a40;
+        }
+
+        button:hover {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+
+        button:active {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, .5);
+        }
+
+        #value {
+            font-weight: bold;
+            display: inline-block;
+            width: 45px;
+            font-size: 16px;
+            text-align: right;
+        }
+
+        #value2 {
+            display: inline-block;
+            width: 40px;
+            font-size: 16px;
+            text-align: right;
+            font-family: Arial, serif;
+            font-weight: bold;
+        }
+
+        #value2-label {
+            font-family: Arial, serif;
+        }
+
+        #formControlRange {
+            position: relative;
+            top: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="settings">
+
+    <span id="value-left">
+    <button id="minus1000" onclick="changeDelay(-1000)" title="-1000 мсек">-1000</button>
+    <button id="minus100" onclick="changeDelay(-100)" title="-100 мсек">-100</button>
+    <span class="value-label">шаг <span id="value">1500</span> мсек.</span>
+    <button id="plus100" onclick="changeDelay(100)" title="+100 мсек">+100</button>
+    <button id="plus1000" onclick="changeDelay(1000)" title="+1000 мсек">+1000</button>
+
+    </span>
+    <!--<input id="delayInput" value="1500" size="4" maxlength="4" type="text">-->
+    <!--<button onclick="setDelay()" title="Установить интервал в миллисекундах">шаг (мсек)</button>-->
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="value2-label" title="Установить вероятность хлопка в %">
+
+        хлопки <input type="range" class="form-control-range" id="formControlRange" min="0" max="100" value="20" step="5"
+               oninput="setChop()">
+         <span id="value2">20</span>%
+    </span>
+
+
+    <!--<input id="chopInput" value="20" size="3" maxlength="3" type="text">-->
+    <!--<button onclick="setChop()" >хлопки (%)</button>-->
+</div>
+
+<div style="visibility: visible; left: 463px; top: 406px; background-color: lightgrey;" id="workGround">ХЛОПОК</div>
+
+</body>
+</html>
